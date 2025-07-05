@@ -16,14 +16,13 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch('https://signature-app-server-1.onrender.com/api/auth/Login', {
+      const res = await fetch('https://signature-app-server-1.onrender.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
-      console.log("Login response:", data);
 
       if (res.ok && data.token) {
         localStorage.setItem('docsign-user', JSON.stringify({

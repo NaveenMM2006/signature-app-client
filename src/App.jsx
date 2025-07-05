@@ -8,11 +8,11 @@ import About from './pages/About';
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home/>}/>
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/About" element={<About/>}/>
+      <Route path="/about" element={<About />} />
     </Routes>
   );
 }
