@@ -23,7 +23,7 @@ export default function Dashboard() {
 
   const fetchFiles = async () => {
     try {
-      const res = await fetch('https://signature-app-server-1.onrender.com/api/docs/user', {
+      const res = await fetch('https://signature-app-server.onrender.com/api/docs/user', {
         headers: {
           Authorization: `Bearer ${user.token}`
         }
@@ -47,7 +47,7 @@ export default function Dashboard() {
     formData.append('pdf', selectedFile);
 
     try {
-      const res = await fetch('https://signature-app-server-1.onrender.com/api/docs/upload', {
+      const res = await fetch('https://signature-app-server.onrender.com/api/docs/upload', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${user.token}`
@@ -70,7 +70,7 @@ export default function Dashboard() {
   };
 
   const openSignatureOverlay = (filePath) => {
-    setActivePdfUrl(`https://signature-app-server-1.onrender.com/${filePath}`);
+    setActivePdfUrl(`https://signature-app-server.onrender.com/${filePath}`);
     setShowSignature(true);
   };
 
@@ -121,7 +121,7 @@ export default function Dashboard() {
                 <h2 className="font-medium text-sm text-gray-800 truncate mb-2">
                   {file.originalName || file.filename}
                 </h2>
-                <PDFViewer file={`https://signature-app-server-1.onrender.com/${file.path}`} />
+                <PDFViewer file={`https://signature-app-server.onrender.com/${file.path}`} />
               </div>
               <button
                 onClick={() => openSignatureOverlay(file.path)}

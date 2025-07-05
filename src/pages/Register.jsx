@@ -16,7 +16,7 @@ export default function Register() {
   e.preventDefault();
 
   try {
-    const res = await fetch('https://signature-app-server-1.onrender.com/api/auth/register', {
+    const res = await fetch('https://signature-app-server.onrender.com/api/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -65,17 +65,33 @@ export default function SignatureOverlay({ onClose, pdfUrl }) {
   const handleDownloadSignedPDF = async () => {
     try {
       const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
-      const signatureSrc = localStorage.getItem('customSignature') || '/signature.png';
+      const signatureSrc = localStorage.getItem('customSignature');
+
+      if (!signatureSrc) {
+        alert("❌ No signature found. Please draw or upload a signature first.");
+        return;
+      }
+
+      const isJpeg = signatureSrc.startsWith("data:image/jpeg");
+      const isPng = signatureSrc.startsWith("data:image/png");
+
+      if (!isJpeg && !isPng) {
+        alert("❌ Unsupported image format. Please use PNG or JPEG.");
+        return;
+      }
+
       const signatureImageBytes = await fetch(signatureSrc).then(res => res.arrayBuffer());
 
       const pdfDoc = await PDFDocument.load(existingPdfBytes);
-      const signatureImage = await pdfDoc.embedPng(signatureImageBytes);
+      const signatureImage = isJpeg
+        ? await pdfDoc.embedJpg(signatureImageBytes)
+        : await pdfDoc.embedPng(signatureImageBytes);
 
       const pages = pdfDoc.getPages();
       const firstPage = pages[0];
-      const { width, height } = firstPage.getSize();
+      const { height } = firstPage.getSize();
 
-      const scale = 0.25;
+      const scale = 0.3;
       const scaledWidth = signatureImage.width * scale;
       const scaledHeight = signatureImage.height * scale;
 
@@ -89,8 +105,8 @@ export default function SignatureOverlay({ onClose, pdfUrl }) {
         height: scaledHeight,
       });
 
-      const user = JSON.parse(localStorage.getItem('user'));
-      const signerName = user?.user?.name || 'Unknown';
+      const user = JSON.parse(localStorage.getItem('docsign-user'));
+      const signerName = user?.name || 'Unknown';
       const date = new Date().toLocaleString();
 
       firstPage.drawText(`Signed by ${signerName} on ${date}`, {
@@ -108,7 +124,7 @@ export default function SignatureOverlay({ onClose, pdfUrl }) {
       link.download = fileName;
       link.click();
 
-      const key = `signedFiles_${user?.user?.email}`;
+      const key = `signedFiles_${user?.email}`;
       const signedFiles = JSON.parse(localStorage.getItem(key)) || [];
       signedFiles.push({ name: fileName, url: link.href });
       localStorage.setItem(key, JSON.stringify(signedFiles));

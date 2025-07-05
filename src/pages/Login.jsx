@@ -16,7 +16,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch('https://signature-app-server-1.onrender.com/api/auth/login', {
+      const res = await fetch('https://signature-app-server.onrender.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
